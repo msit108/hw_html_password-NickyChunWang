@@ -1,50 +1,144 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
 <script src="js/jquery.js"></script>
 <script src="js/seedrandom.js"></script>
 <style>
-#randomTable {
-    font-family: monospace;
-    font-size: 2.0em;
+
+
+.box {
+	position: fixed;
+	top: -200px;
+	left: 30%;
+	width: 450px;
+	background-color: #fff;
+	color: #7F7F7F;
+	padding: 20px;
+	border: 2px solid #ccc;
+	-moz-border-radius: 20px;
+	-webkit-border-radius: 20px;
+	-khtml-border-radius: 20px;
+	-moz-box-shadow: 0 1px 5px #333;
+	-webkit-box-shadow: 0 1px 5px #333;
+	z-index: 101;
+	-webkit-transition: all 2s ease-out;
+	-ms-transition: all 2s ease-out;
+	transition: all 2s ease-out;
+}
+
+.box h1 {
+	border-bottom: 1px dashed #7F7F7F;
+	margin: -20px -20px 0px -20px;
+	padding: 10px;
+	background-color: #FFEFEF;
+	color: #EF7777;
+	-moz-border-radius: 20px 20px 0px 0px;
+	-webkit-border-top-left-radius: 20px;
+	-webkit-border-top-right-radius: 20px;
+	-khtml-border-top-left-radius: 20px;
+	-khtml-border-top-right-radius: 20px;
+}
+
+a.boxclose {
+	float: right;
+	width: 26px;
+	height: 26px;
+	background: transparent url(images/cancel.png) repeat top left;
+	margin-top: -30px;
+	margin-right: -30px;
+	cursor: pointer;
+}
+body{
+    margin:0px;
+    padding:100px;
+    background-image: url("images/lock.png");
+    background-repeat:no-repeat;
+    -moz-background-size: cover;
+    background-size: cover;
+}
+#txtColor{
+    color:whitesmoke;
 }
 </style>
 </head>
 <body>
+    
+    
+    <div class="box" id="box">
+        <a class="boxclose" id="boxclose"></a>
+        <h1>Result</h1>
+        <p id="result">
 
-請輸入亂數表的編號：<input type="text" id="txtSeed" value="1234" />
-&nbsp;<input type="button" id="btnGo" value="產生亂數表" />
+        </p>
+    </div>
+    <p id="txtColor">請輸入亂數表的編號：</p>
 
+    <input type="text" id="txtSeed" value="1234" />&nbsp;
+    <br/>
+    <input class="btn btn-default btn-xs" type="button" id="btnGo" value="產生數字亂數表" />
+    <br/>
+    <input class="btn btn-default btn-xs" type="button" id="btnGo1" value="產生英文亂數表" />
+    <br/>
+    <input class="btn btn-default btn-xs" type="button" id="btnGo2" value="產生英數亂數表" />
+   
 <div id="randomTable">
 </div>
-
+  
 <script>
+    spoll = ""
 
-$("#btnGo").click(function () {
-    var result = "";
-	// 純數字:
-	var sPool = "0123456789";
-    // 數字+小寫字母: (去除 l, o)
-    // var sPool = "abcdefghijkmnpqrstuvwxyz0123456789";
-    // 數字+大小寫字母: (去除 I, O, l, o)
-    // var sPool = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz0123456789";
+    function key() {
+        var result = "";
+        Math.seedrandom($("#txtSeed").val()); // 設定亂數種子
+        var iRandom = 0; var ch = "?";
+        for (iRow = 1; iRow <= 10; iRow++) {
+            var sLine = (iRow + 100).toString().substr(1, 2) + ": ";
+            for (iCol = 1; iCol <= 10; iCol++) {
+                iRandom = Math.floor(Math.random() * spoll.length);
+                ch = spoll.substr(iRandom, 1);
+                sLine += ch;
+            }
+            result += sLine + "<br>";
+        }
+        $("#result").html(result);
+        doAnimateShow()
+    }
 
-    Math.seedrandom($("#txtSeed").val()); // 設定亂數種子
-	var iRandom = 0; var ch = "?";
-	for (iRow = 1; iRow <= 10; iRow++) {
-		var sLine = (iRow + 100).toString().substr(1, 2) + ": ";
-		for (iCol = 1; iCol <= 10; iCol++) {
-			iRandom = Math.floor(Math.random() * sPool.length);
-			ch = sPool.substr(iRandom, 1);
-			sLine += ch;
-		}
-		result += sLine + "<br>";
-	}
-	$("#randomTable").html(result);
-});
+    function doAnimateShow() {
+        document.getElementById("box").style.top = "150px";
+        document.getElementById("box").style.transition = "all 2s ease-out";
+    }
 
+    function doAnimateHide() {
+        document.getElementById("box").style.top = "-300px";
+        document.getElementById("box").style.transition = "all 0.1s ease-out";
+        event.cancelBubble = true;
+    }
+
+    $("#btnGo").click(function () {
+
+        spoll = "0123456789";
+        key();
+    });
+
+    $("#btnGo1").click(function () {
+
+        spoll = "abcdefghijklmnopqrstuvwxyz";
+        key();
+    });
+
+    $("#btnGo2").click(function () {
+
+        spoll = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz0123456789";
+        key();
+    });
+
+    document.getElementById("boxclose").onclick = doAnimateHide;
+
+    
 </script>
 
 </body>
